@@ -5,7 +5,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 import br.com.ifpe.oxefood.util.entity.EntidadeAuditavel;
 
-//import jakarta.persistence.Column;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Entity
-@Table(name = "Cliente")
+@Entity //Alterar, gravar se em cima da class estiver Entity
+@Table(name = "Cliente")//convertida em uma tabela no banco
 @SQLRestriction("habilitado = true")// acrescente em todas as consultas uma clausula where: habilitado = true
 
 @Builder
@@ -27,19 +27,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Cliente extends EntidadeAuditavel  {
   
-   //@Column
+   @Column
    private String nome;
     
-   //@Column
+   @Column(name="dt_nasc")
    private LocalDate dataNascimento;
    
-   //@Column
+   @Column
    private String cpf;
    
-   //@Column
+   @Column
    private String foneCelular;
   
-   //@Column
+   @Column
    private String foneFixo;
 
 }

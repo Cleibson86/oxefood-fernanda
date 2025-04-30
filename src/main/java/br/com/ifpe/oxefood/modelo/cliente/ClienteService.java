@@ -11,7 +11,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class ClienteService {
 
-    @Autowired
+    @Autowired // instânciar um objeto(repository)
     private ClienteRepository repository;
 
     @Transactional
