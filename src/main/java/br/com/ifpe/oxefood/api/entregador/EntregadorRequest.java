@@ -23,6 +23,8 @@ public class EntregadorRequest {
 
     private String cpf;
 
+    private String rg;
+
     private String foneCelular;
 
     private String foneFixo;
@@ -53,6 +55,7 @@ public class EntregadorRequest {
                 .nome(nome)
                 .dataNascimento(dataNascimento)
                 .cpf(cpf)
+                .rg(rg)
                 .foneCelular(foneCelular)
                 .foneFixo(foneFixo)
                 .qtdEntregasRealizadas(qtdEntregasRealizadas)
