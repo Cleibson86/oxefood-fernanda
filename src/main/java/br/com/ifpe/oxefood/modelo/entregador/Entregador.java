@@ -43,10 +43,10 @@ public class Entregador extends EntidadeAuditavel {
    @Column
    private String foneFixo;
 
-   @Column
+   @Column(name = "qtd_entregas_realizadas")
    private Integer qtdEntregasRealizadas;
 
-   @Column
+   @Column(name = "valor_frete")
    private Double valorFrete;
 
    @Column

@@ -1,8 +1,8 @@
 package br.com.ifpe.oxefood.api.produto;
 
-//import java.time.LocalDate;
+import java.time.LocalDate;
 
-//import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.ifpe.oxefood.modelo.produto.Produto;
 import lombok.AllArgsConstructor;
@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 
 public class ProdutoRequest {
     
-    //private String nome;
+    private String nome;
 
-    //@JsonFormat(pattern = "dd/MM/yyyy")
-    //private LocalDate dataNascimento;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataNascimento;
 
     private String codigo;
 

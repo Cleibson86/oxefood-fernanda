@@ -27,28 +27,31 @@ public class EntregadorController {
   @Autowired
   private EntregadorService entregadorService;
 
-  @PostMapping
-  public ResponseEntity<Entregador> save(@RequestBody EntregadorRequest request) {
+    @PostMapping
+    public ResponseEntity<Entregador> save(@RequestBody EntregadorRequest request) {
 
-    Entregador entregador = entregadorService.save(request.build());
-    return new ResponseEntity<Entregador>(entregador, HttpStatus.CREATED);
+      Entregador entregador = entregadorService.save(request.build());
+      return new ResponseEntity<Entregador>(entregador, HttpStatus.CREATED);
 
-  }
-   @GetMapping
-  public List<Entregador> listarTodos() {
-    return entregadorService.listarTodos();
-  }
-  @GetMapping("/{id}")
-  public Entregador obterPorID(@PathVariable Long id) {
-    return entregadorService.obterPorID(id);
-  }
-  @PutMapping("/{id}")
-  public ResponseEntity<Entregador> update(@PathVariable("id") Long id, @RequestBody EntregadorRequest request) {
+    }
+    @GetMapping
+    public List<Entregador> listarTodos() {
+      return entregadorService.listarTodos();
+    }
 
-    entregadorService.update(id, request.build());
-    return ResponseEntity.ok().build();
-  }
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}")
+    public Entregador obterPorID(@PathVariable Long id) {
+      return entregadorService.obterPorID(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Entregador> update(@PathVariable("id") Long id, @RequestBody EntregadorRequest request) {
+
+      entregadorService.update(id, request.build());
+      return ResponseEntity.ok().build();
+    }
+
+   @DeleteMapping("/{id}")
    public ResponseEntity<Void> delete(@PathVariable Long id) {
 
        entregadorService.delete(id);
