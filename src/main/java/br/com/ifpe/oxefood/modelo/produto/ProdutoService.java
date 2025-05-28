@@ -34,6 +34,7 @@ public class ProdutoService {
     public void update(Long id, Produto produtoAlterado) {
 
         Produto produto = repository.findById(id).get();
+        produto.setCategoria(produtoAlterado.getCategoria());
         produto.setCodigo(produtoAlterado.getCodigo());
         produto.setTitulo(produtoAlterado.getTitulo());
         produto.setDescricao(produtoAlterado.getDescricao());
@@ -47,8 +48,8 @@ public class ProdutoService {
    public void delete(Long id) {
 
        Produto produto = repository.findById(id).get();
-       produto.setHabilitado(Boolean.FALSE);
+            produto.setHabilitado(Boolean.FALSE);
 
-       repository.save(produto);
+            repository.save(produto);
        }
 }

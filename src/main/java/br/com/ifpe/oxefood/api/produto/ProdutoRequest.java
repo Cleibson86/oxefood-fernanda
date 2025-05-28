@@ -16,11 +16,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class ProdutoRequest {
+
     
     private String nome;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataNascimento;
+
+    private long IdCategoria;
 
     private String codigo;
 
