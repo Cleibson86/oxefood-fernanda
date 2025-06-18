@@ -26,9 +26,9 @@ public class ClienteService {
     }
 
     public Cliente obterPorID(Long id) {
-
         return repository.findById(id).get();// SELECT * Cliente where id
     }
+    
     @Transactional
    public void update(Long id, Cliente clienteAlterado) {
 

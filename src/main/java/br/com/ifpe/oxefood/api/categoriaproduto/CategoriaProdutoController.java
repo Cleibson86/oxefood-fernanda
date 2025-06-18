@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.oxefood.modelo.categoriaproduto.CategoriaProduto;
 import br.com.ifpe.oxefood.modelo.categoriaproduto.CategoriaProdutoService;
+import jakarta.validation.Valid;
 
 
 @RestController // O que faz essa class ser controlador é o (@RestController)
@@ -29,7 +30,7 @@ public class CategoriaProdutoController {
   private CategoriaProdutoService categoriaprodutoService;
 
   @PostMapping // especificar que vai receber requisições do post
-  public ResponseEntity<CategoriaProduto> save(@RequestBody CategoriaProdutoRequest request) {
+  public ResponseEntity<CategoriaProduto> save(@RequestBody @Valid CategoriaProdutoRequest request) {
 
     CategoriaProduto categoriaproduto = categoriaprodutoService.save(request.build());
     return new ResponseEntity<CategoriaProduto>(categoriaproduto, HttpStatus.CREATED);
@@ -47,7 +48,7 @@ public class CategoriaProdutoController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<CategoriaProduto> update(@PathVariable("id") Long id, @RequestBody CategoriaProdutoRequest request) {
+  public ResponseEntity<CategoriaProduto> update(@PathVariable("id") Long id, @RequestBody @Valid CategoriaProdutoRequest request) {
 
     categoriaprodutoService.update(id, request.build());
     return ResponseEntity.ok().build();
