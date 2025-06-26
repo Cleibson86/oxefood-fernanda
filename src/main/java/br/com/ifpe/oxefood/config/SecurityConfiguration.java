@@ -17,7 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import br.com.ifpe.oxefood.modelo.acesso.Usuario;
-//import br.com.ifpe.oxefood.modelo.seguranca.JwtAuthenticationFilter;
+import br.com.ifpe.oxefood.modelo.seguranca.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -71,4 +71,3 @@ public class SecurityConfiguration {
         return source;
     }
 }
-
