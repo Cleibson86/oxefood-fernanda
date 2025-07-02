@@ -18,7 +18,7 @@ import jakarta.validation.Valid;
 import br.com.ifpe.oxefood.modelo.cliente.ClienteService;
 import br.com.ifpe.oxefood.modelo.endereco.Endereco;
 import br.com.ifpe.oxefood.modelo.endereco.EnderecoService;
-import org.springframework.web.bind.annotation.RequestParam;
+//import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController // O que faz essa class ser controlador é o (@RestController)

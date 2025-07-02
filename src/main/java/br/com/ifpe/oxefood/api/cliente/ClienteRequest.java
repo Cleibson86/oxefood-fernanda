@@ -1,6 +1,6 @@
 package br.com.ifpe.oxefood.api.cliente;
 
-import org.hibernate.annotations.FetchMode;
+//import org.hibernate.annotations.FetchMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -60,7 +60,7 @@ public class ClienteRequest {
     @CPF
     private String cpf;
 
-    @Pattern(regexp = "^81\\d{9}$", message = "O telefone celular deve começar com 81 e conter 10 dígitos no total")
+    @Pattern(regexp = "^81\\d{8}$", message = "O telefone celular deve começar com 81 e conter 10 dígitos no total")
     private String foneCelular;
 
     @Pattern(regexp = "^81\\d{8}$", message = "O telefone fixo deve começar com 81 e conter 10 dígitos no total")
