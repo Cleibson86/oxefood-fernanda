@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-
-
+import br.com.ifpe.oxefood.modelo.acesso.UsuarioService;
 import br.com.ifpe.oxefood.modelo.cliente.Cliente;
 import br.com.ifpe.oxefood.modelo.cliente.ClienteService;
 
@@ -25,13 +26,17 @@ import br.com.ifpe.oxefood.modelo.cliente.ClienteService;
 @CrossOrigin // Para receber requisições do react
 
 public class ClienteController {
+
+    @Autowired
+    private UsuarioService usuarioService;
+
   @Autowired // estânciar um objeto
   private ClienteService clienteService;
 
   @PostMapping // especificar que vai receber requisições do post
-  public ResponseEntity<Cliente> save(@RequestBody  @Valid ClienteRequest request) {
+  public ResponseEntity<Cliente> save(@RequestBody  @Valid ClienteRequest clienterequest, HttpServletRequest request) {
 
-    Cliente cliente = clienteService.save(request.build());
+    Cliente cliente = clienteService.save(clienterequest.build(), null);
     return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
 
   }
@@ -47,9 +52,9 @@ public class ClienteController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Cliente> update(@PathVariable("id") Long id, @RequestBody  @Valid ClienteRequest request) {
+  public ResponseEntity<Cliente> update(@PathVariable("id") Long id, @RequestBody  @Valid ClienteRequest clienteRequest, HttpServletRequest request) {
 
-    clienteService.update(id, request.build());
+    clienteService.update(id, clienteRequest.build(), null);
     return ResponseEntity.ok().build();
   }
     @DeleteMapping("/{id}")
