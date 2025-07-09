@@ -17,7 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import br.com.ifpe.oxefood.modelo.acesso.Perfil;
-import br.com.ifpe.oxefood.modelo.acesso.Usuario;
+//import br.com.ifpe.oxefood.modelo.acesso.Usuario;
 import br.com.ifpe.oxefood.modelo.seguranca.JwtAuthenticationFilter;
 
 @Configuration
@@ -40,12 +40,14 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(c -> c.disable())
                 .authorizeHttpRequests(authorize -> authorize
-
-                        .requestMatchers(HttpMethod.POST, "/api/cliente").permitAll()
+                        //rotas publicas aqui.
+                        .requestMatchers(HttpMethod.POST, "/api/cliente").permitAll()//permitAll= qualquer usuario consegue loga
+                       //cadastrar cliente
                         .requestMatchers(HttpMethod.POST, "/api/funcionario").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
+                        //cadastrar funcionario
+                        .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()// login
 
-                        .requestMatchers(HttpMethod.GET, "/api/produto/").hasAnyAuthority(
+                        .requestMatchers(HttpMethod.GET, "/api/produto/").hasAnyAuthority(// Atraves do hasAnyAuthority pode ser definido os perfis que poderam acessar a rota
                                 Perfil.ROLE_CLIENTE,
                                 Perfil.ROLE_FUNCIONARIO_ADMIN,
                                 Perfil.ROLE_FUNCIONARIO_USER) // Consulta de produto

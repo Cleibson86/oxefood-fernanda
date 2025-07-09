@@ -1,0 +1,138 @@
+A anotação `@Column` em JPA é bastante versátil e pode ser configurada com diferentes atributos para atender às necessidades específicas de seu modelo de dados. Aqui está uma lista com os atributos mais usados da anotação `@Column` e suas descrições:
+-Entidade basica de estrutura, colocada assima dos atributos que é anotação JPA -k@Column
+Atributos de @Column
+
+nullable
+Define se a coluna pode aceitar valores null.
+Exemplo: @Column(nullable = false) → valor obrigatório.
+
+length
+Define o tamanho máximo de caracteres (usado com String).
+Exemplo: @Column(length = 255) → até 255 caracteres.
+
+precision
+Usado com tipos numéricos (BigDecimal), define o número total de dígitos.
+Exemplo: @Column(precision = 10) → até 10 dígitos.
+
+scale
+Define o número de casas decimais para BigDecimal.
+Exemplo: @Column(precision = 10, scale = 2) → 8 inteiros + 2 decimais.
+
+unique
+Garante que os valores da coluna sejam únicos no banco.
+Exemplo: @Column(unique = true) → usado para CPF, e-mail, etc.
+
+insertable
+Define se a coluna entra na instrução INSERT.
+Exemplo: @Column(insertable = false) → campo preenchido pelo banco.
+
+updatable
+Define se a coluna pode ser alterada depois da inserção.
+Exemplo: @Column(updatable = false) → usado para data de criação.
+
+name
+Especifica o nome da coluna no banco (se diferente do atributo).
+Exemplo: @Column(name = "nome_cliente")
+
+columnDefinition
+Permite definir o tipo SQL da coluna manualmente.
+Exemplo: @Column(columnDefinition = "TEXT")
+
+table
+Associa a coluna a uma tabela específica (muito raro de usar).
+Exemplo: @Column(table = "dados_pessoais")
+
+🔹 Anotações JPA e Lombok
+@Entity
+Indica que a classe é uma entidade JPA — será mapeada como uma tabela no banco de dados.
+
+@Where (equivale à sua citação @SQLRestriction)
+Adiciona uma condição SQL automática para todas as consultas da entidade.
+Exemplo: @Where(clause = "ativo = true") → retorna apenas registros ativos.
+
+@Builder
+Cria o padrão de construção fluente para objetos.
+Exemplo: Paciente.builder().nome("João").cpf("123").build();
+
+@Setter e @Getter
+Geram automaticamente os métodos set e get para todos os atributos da classe.
+
+@AllArgsConstructor
+Cria um construtor com todos os atributos da classe.
+
+@NoArgsConstructor
+Cria um construtor vazio, exigido pelo JPA para instanciar entidades
+
+@JsonIgnore	
+Jackson	Oculta campo na conversão Java ↔ JSON
+
+@MappedSuperclass	
+JPA	Define superclasse com atributos reutilizáveis
+
+@GeneratedValue
+JPA	Define como o valor da @Id será gerado
+
+
+
+Aqui está como você poderia usar esses atributos em uma classe de entidade:
+
+```java
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Column;
+
+@Entity
+public class ExemploEntidade {
+
+    @Id (Marca o campo chave primária.)
+    private Long id;
+
+    @Column(nullable = false, length = 100, unique = true)
+    private String nome;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal valor;
+
+    @Column(insertable = false, updatable = false)
+    private String status;
+
+    @Column(name = "data_criacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime dataCriacao;
+
+
+    @Column(nullable = false, length = 11, unique = true)
+    private String cpf; // CPF é geralmente armazenado como uma string com 11 caracteres
+
+    @Column(nullable = true, length = 15)
+    private String telefone; // Telefone pode variar em formato, então 15 é um tamanho razoável
+
+
+    // Getters e setters
+    // ...
+}
+```
+
+
+Neste exemplo, cada atributo da anotação `@Column` é utilizado para definir características específicas das colunas da tabela no banco de dados.
+
+- - - - - - 
+Fazem o mapeamento entre entidades.
+
+@OneToOne	Um para Um	Um paciente tem um prontuário
+
+@OneToMany	Um para Muitos	Um médico tem muitas consultas
+
+@ManyToOne	Muitos para Um	Muitas consultas têm um médico
+
+@ManyToMany	Muitos para Muitos	Um aluno pode ter muitas disciplinas e vice-versa
+
+
+Tabela de Relacionamentos – Obrigatoriedade e Cardinalidade
+Notação	Nome do Relacionamento	    Obrigatoriedade	       Quantidade	                Exemplo
+0..1	Opcional e único	         Não obrigatório	   No máximo 1    	Aluno pode ter um estágio
+1..1	Obrigatório e único	         Obrigatório	       Exatamente 1	    Funcionário deve ter 1 crachá
+0..*	Opcional e múltiplo	         Não obrigatório	     Vários	     Médico pode atender vários pacientes
+1..*	Obrigatório e múltiplo	O    brigatório	            1 ou mais	 Pedido deve ter pelo menos 1 item
+D  E
+
+D_direito / E_esquerdo

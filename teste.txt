@@ -5,3 +5,92 @@ Login
     "password": "12345",
     "nome": "fernanda"
 }
+
+entregador
+
+ {
+        "nome": "Mirna",
+        "cpf": 17141214453,
+        "rg": "12365485",
+        "dataNascimento": "12/04/1970",
+        "foneCelular": "(81) 9999.9999_",
+        "foneFixo": "(81) 9999.9999",
+        "qtdEntregasRealizadas": 10,
+        "valorFrete": 10.0,
+        "enderecoRua": "luiz sales",
+        "enderecoNumero": "76",
+        "enderecoBairro": "Afogados",
+        "enderecoCidade": "Recife",
+        "enderecoCep": "56800-000",
+        "enderecoUf": null,
+        "enderecoComplemento": "dddd",
+        "ativo": true
+    }
+cliente
+
+{
+    
+    "email": "paula@gmail.com",
+    "password": "12345678",
+    "nome": "Paula",
+    "dataNascimento": "10/02/1989",
+    "cpf": "03624440489",
+    "foneCelular": "(81) 11111.111_",
+    "foneFixo": "(81) 1111.1111"
+}
+
+Endereço Cliente
+
+{
+    "rua": "Rua da Vila",
+    "numero": "103",
+    "bairro": "Areias",
+    "cep": "53.908.123",
+    "cidade": "Recife",
+    "estado": "PE",
+    "complemento": "xy 21"
+}
+
+Produto
+
+{
+   "codigo": "ABC123",
+   "titulo": "Produto ",
+   "descricao": "Produto de exemplo",
+   "valorUnitario": 23.99,
+   "tempoEntregaMinimo": 4,
+   "tempoEntregaMaximo": 2
+}
+
+Categoria
+
+{
+    "idCategoria": 3,
+   "codigo": "FFo28",
+   "titulo": "Bebida",
+   "descricao": "refrigerante",
+   "valorUnitario": 5,
+   "tempoEntregaMinimo": 3,
+   "tempoEntregaMaximo": 7
+}
+
+Funcionario
+
+{
+    "nome":"Coraline",
+    "cpf":"17141214453",
+    "rg":"5757356",
+    " dataNascimento":"28/05/1981",
+    " foneCelular":"81 985838887",
+    "foneFixo":"81 32496292",
+    "salario":"1899",
+    "enderecoRua":"Vila",
+    "enderecoNumero":"73",
+    "enderecoBairro":"Barro",
+    "enderecoCidade":"Recife",
+    "enderecoCep":"50781291"
+    "enderecoUf":"PE",
+    "enderecoComplemento": "Rua da Vila"
+
+}
+

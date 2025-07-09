@@ -29,10 +29,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Funcionario extends EntidadeAuditavel {
-    
-    @OneToOne
+
+    //Relacionamento com o usuário
+    @OneToOne //1 p 1
     @JoinColumn(nullable = false)
-    private Usuario usuario;
+    private Usuario usuario; //Usuario vaiter log e senha
 
 
     @Column(nullable = false)

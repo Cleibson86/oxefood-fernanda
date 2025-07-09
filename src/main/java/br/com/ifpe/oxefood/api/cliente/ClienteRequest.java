@@ -60,11 +60,12 @@ public class ClienteRequest {
     @CPF
     private String cpf;
 
-    @Pattern(regexp = "^81\\d{8}$", message = "O telefone celular deve começar com 81 e conter 10 dígitos no total")
+   @Length(min = 8, max = 20, message = "O campo Fone Celular tem que ter entre {min} e {max} caracteres")
     private String foneCelular;
 
-    @Pattern(regexp = "^81\\d{8}$", message = "O telefone fixo deve começar com 81 e conter 10 dígitos no total")
+    @Length(min = 8, max = 20, message = "O campo Fone Fixo tem que ter entre {min} e {max} caracteres")
     private String foneFixo;
+
 
 
     public Cliente build() {
