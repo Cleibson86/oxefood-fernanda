@@ -19,11 +19,17 @@ import br.com.ifpe.oxefood.modelo.cliente.ClienteService;
 import br.com.ifpe.oxefood.modelo.endereco.Endereco;
 import br.com.ifpe.oxefood.modelo.endereco.EnderecoService;
 //import org.springframework.web.bind.annotation.RequestParam;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController // O que faz essa class ser controlador é o (@RestController)
 @RequestMapping("/api/endereco") // Indica o endereço do controlador para rodar na tela.
 @CrossOrigin // Para receber requisições do react
+@Tag(
+    name = "API Endereco",
+    description = "API responsável pelos servidos de endereco no sistema"
+)
+
 
 public class EnderecoController {
     @Autowired
@@ -31,6 +37,11 @@ public class EnderecoController {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Operation(
+       summary = "Serviço responsável por alterar um endereco no sistema.",
+       description = "Exemplo de descrição de um endpoint responsável por inserir um endereco no sistema."
+   )
 
   @PostMapping// especificar que vai receber requisições do post
   public ResponseEntity<Endereco> save(@RequestBody  @Valid EnderecoRequest request) {
@@ -57,12 +68,20 @@ public class EnderecoController {
     return enderecoService.obterPorID(id);
   }
 
+   @Operation(
+       summary = "Serviço responsável por alterar um endereco no sistema.",
+       description = "Exemplo de descrição de um endpoint responsável por inserir um endereco no sistema."
+   )
   @PutMapping("/{id}")
   public ResponseEntity<Endereco> update(@PathVariable("id") Long id, @RequestBody  @Valid EnderecoRequest request) {
 
     enderecoService.update(id, request.build());
     return ResponseEntity.ok().build();
   }
+   @Operation(
+       summary = "Serviço responsável por deletar um endereco no sistema.",
+       description = "Exemplo de descrição de um endpoint responsável por inserir um endereco no sistema."
+   )
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
 

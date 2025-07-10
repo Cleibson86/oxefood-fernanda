@@ -35,7 +35,7 @@ cliente
     "nome": "Paula",
     "dataNascimento": "10/02/1989",
     "cpf": "03624440489",
-    "foneCelular": "(81) 11111.111_",
+    "foneCelular": "(81) 11111.1111",
     "foneFixo": "(81) 1111.1111"
 }
 

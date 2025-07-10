@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import br.com.ifpe.oxefood.modelo.categoriaproduto.CategoriaProdutoService;
 import br.com.ifpe.oxefood.modelo.produto.Produto;
 import br.com.ifpe.oxefood.modelo.produto.ProdutoService;
@@ -24,6 +25,11 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/produto")
 @CrossOrigin
+@Tag(
+    name = "API Produto",
+    description = "API responsável pelos servidos de produto no sistema"
+)
+
 
 public class ProdutoController {
   @Autowired
@@ -31,6 +37,11 @@ public class ProdutoController {
 
   @Autowired
   private CategoriaProdutoService categoriaProdutoService;
+
+  @Operation(
+       summary = "Serviço responsável por salvar um produto no sistema.",
+       description = "Exemplo de descrição de um endpoint responsável por inserir um produto no sistema."
+   )
 
   @PostMapping
   public ResponseEntity<Produto> save(@RequestBody @Valid ProdutoRequest request) {
@@ -51,6 +62,10 @@ public class ProdutoController {
     return produtoService.obterPorID(id);
   }
 
+   @Operation(
+       summary = "Serviço responsável por altrar um produto no sistema.",
+       description = "Exemplo de descrição de um endpoint responsável por inserir um produto no sistema."
+   )
   @PutMapping("/{id}")
   public ResponseEntity<Produto> update(@PathVariable("id") Long id, @RequestBody ProdutoRequest request) {
     Produto produto = request.build();
@@ -60,6 +75,10 @@ public class ProdutoController {
     return ResponseEntity.ok().build();
   }
 
+   @Operation(
+       summary = "Serviço responsável por deletar um produto no sistema.",
+       description = "Exemplo de descrição de um endpoint responsável por inserir um produto no sistema."
+   )
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
 

@@ -34,7 +34,7 @@ public class Usuario extends EntidadeNegocio implements UserDetails {
 
    @Column(nullable = false, unique = true)
    private String username;
-@JsonIgnore
+   @JsonIgnore
    @Column(nullable = false)
    private String password;
 
