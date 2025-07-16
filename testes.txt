@@ -356,4 +356,250 @@ A utilidade desse arquivo  são as configuracoes do nome do banco e senha que s�
 Evita expor informações ensíveis e facilita a troca de ambiente (desenvolvimento, produção etc).
 
 --------------------------------------------------------------------------------- 
-08)
+08) Implemente um relacionamento de 1 - N bidirecional entre as classes Categoria e Produto:
+
+Uma categoria pode conter vários produtos;
+
+Um produto pertence a uma única categoria.
+
+✅ Resposta:
+java
+Copiar código
+// Categoria.java
+@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
+private List<Produto> produtos;
+
+// Produto.java
+@ManyToOne
+@JoinColumn(name = "categoria_id")
+private Categoria categoria;
+---------------------------------------------------------------------
+🔹 Pergunta b)
+Implemente as seguintes validações:
+
+O campo nome da classe Produto não pode ser nulo, vazio e deve ter no máximo 50 caracteres;
+
+O campo preco da classe Produto não pode ser negativo.
+
+✅ Resposta:
+java
+Copiar código
+@NotBlank(message = "O nome é de preenchimento obrigatório")
+@Length(max = 50, message = "O nome deve ter no máximo {max} caracteres")
+private String nome;
+
+@PositiveOrZero(message = "O preço não pode ser negativo")
+private Double preco;
+-----------------------------------------------------------------------
+🔹 Pergunta c)
+Implemente no repositório ProdutoRepository:
+
+Uma consulta que filtre produtos por parte do nome, sem considerar letras maiúsculas ou minúsculas. Ordene por preço.
+
+Uma consulta que retorne todos os produtos de uma categoria específica, recebendo o nome da categoria como parâmetro.
+
+✅ Resposta:
+java
+Copiar código
+@Query("SELECT p FROM Produto p WHERE LOWER(p.nome) LIKE LOWER(CONCAT('%', :nome, '%')) ORDER BY p.preco")
+List<Produto> buscarPorNome(@Param("nome") String nome);
+
+@Query("SELECT p FROM Produto p WHERE p.categoria.nome = :nomeCategoria")
+List<Produto> buscarPorCategoria(@Param("nomeCategoria") String nomeCategoria);
+------------------------------------------------------------------------
+✅ Exercício 2 – Relacionamento 1-1 e Segurança com Spring Security
+🔹 Pergunta a)
+Implemente um relacionamento de 1 - 1 bidirecional entre as classes Aluno e Carteirinha:
+
+Cada aluno possui uma carteirinha;
+
+A carteirinha pertence a um único aluno.
+
+✅ Resposta:
+java
+Copiar código
+// Aluno.java
+@OneToOne(mappedBy = "aluno", cascade = CascadeType.ALL)
+private Carteirinha carteirinha;
+
+// Carteirinha.java
+@OneToOne
+@JoinColumn(name = "aluno_id")
+private Aluno aluno;
+--------------------------------------------------------------------------------------
+🔹 Pergunta b)
+Implemente a classe AlunoRequest com as seguintes validações:
+
+O campo nome é obrigatório e deve conter no máximo 100 caracteres;
+
+O campo email deve estar em um formato válido.
+
+✅ Resposta:
+java
+Copiar código
+@NotBlank(message = "O nome é obrigatório")
+@Length(max = 100, message = "O nome deve ter no máximo {max} caracteres")
+private String nome;
+
+@Email(message = "Formato de e-mail inválido")
+private String email;
+-------------------------------------------------------------------------
+🔹 Pergunta c)
+Modifique o código do SecurityFilterChain para:
+
+Permitir acesso público à rota de cadastro de aluno (POST /api/aluno/cadastrar);
+
+Permitir apenas usuários com o perfil ADMIN acessarem a exclusão de alunos (DELETE /api/aluno/{id}).
+
+✅ Resposta:
+java
+Copiar código
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.POST, "/api/aluno/cadastrar").permitAll()
+            .requestMatchers(HttpMethod.DELETE, "/api/aluno/{id}").hasRole("ADMIN")
+            .anyRequest().authenticated()
+        )
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authenticationProvider(authenticationProvider)
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    return http.build();
+}
+--------------------------------------------------------------------------------
+✅ Exercício 3 – Consultas Personalizadas com @Query
+🔹 Pergunta a)
+Na interface AlunoRepository:
+
+Consulta que filtre alunos por nome (parcial e case insensitive), ordenados por data de nascimento;
+
+Consulta que retorne alunos com e-mail @ifpe.edu.br.
+
+✅ Resposta:
+java
+Copiar código
+@Query("SELECT a FROM Aluno a WHERE LOWER(a.nome) LIKE LOWER(CONCAT('%', :nome, '%')) ORDER BY a.dataNascimento")
+List<Aluno> buscarPorNome(@Param("nome") String nome);
+
+@Query("SELECT a FROM Aluno a WHERE a.email LIKE '%@ifpe.edu.br'")
+List<Aluno> buscarPorEmailIfpe();
+---------------------------------------------
+🔹 Pergunta b)
+Na interface CarteirinhaRepository:
+
+Consulta para carteirinhas emitidas após uma data;
+
+Consulta para carteirinha de aluno com nome exato.
+
+✅ Resposta:
+java
+Copiar código
+@Query("SELECT c FROM Carteirinha c WHERE c.dataEmissao > :data")
+List<Carteirinha> buscarPorDataEmissao(@Param("data") LocalDate data);
+
+@Query("SELECT c FROM Carteirinha c WHERE c.aluno.nome = :nome")
+Carteirinha buscarPorNomeAluno(@Param("nome") String nome);
+
+-------------------------------------------------------------------------
+✅ Exercício 4 – Envio de E-mail com Template Thymeleaf
+🔹 Pergunta a)
+Implemente o método enviarEmailBoasVindas(Aluno aluno) com os campos do template:
+
+nomeAluno, dataCadastro, matricula.
+
+Assunto do e-mail: "Bem-vindo(a) à nossa escola!"
+
+✅ Resposta:
+java
+Copiar código
+public void enviarEmailBoasVindas(Aluno aluno) {
+    String assuntoEmail = "Bem-vindo(a) à nossa escola!";
+
+    Context context = new Context();
+    context.setVariable("nomeAluno", aluno.getNome());
+    context.setVariable("dataCadastro", LocalDate.now());
+    context.setVariable("matricula", aluno.getMatricula());
+
+    sendMailTemplate("boas_vindas.html", aluno.getEmail(), assuntoEmail, context);
+}
+------------------------------------------------------------------------
+✅ Exercício 5 – Documentação com Swagger
+🔹 Pergunta a)
+Explique:
+
+Qual biblioteca usamos para Swagger?
+
+Como documentar um endpoint com @Tag e @Operation?
+
+✅ Resposta:
+Biblioteca usada: springdoc-openapi
+
+Exemplo:
+
+java
+Copiar código
+@Tag(name = "API Aluno", description = "Gerencia os alunos do sistema")
+@RestController
+@RequestMapping("/api/aluno")
+public class AlunoController {
+
+    @Operation(
+        summary = "Cadastrar novo aluno",
+        description = "Serviço responsável por cadastrar aluno no sistema"
+    )
+    @PostMapping("/cadastrar")
+    public ResponseEntity<Void> cadastrar(@RequestBody AlunoRequest request) {
+        // lógica
+    }
+}
+--------------------------------------------------------------------------
+✅ Exercício 6 – Arquivo docker-compose.yml
+🔹 Pergunta a)
+Explique:
+
+Para que serve o docker-compose.yml?
+
+Por que ele precisa estar no servidor?
+
+✅ Resposta:
+O docker-compose.yml permite configurar todos os containers necessários para a aplicação (ex: banco + back-end).
+
+No servidor, ele garante que a infraestrutura será criada e iniciada com um único comando (docker-compose up), facilitando o deploy.
+-----------------------------------------------------------------------------------------
+🔹 Pergunta b)
+Crie um arquivo docker-compose.yml com PostgreSQL e Spring Boot conectando ao banco.
+
+✅ Resposta:
+yaml
+Copiar código
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: meu_banco
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: senha
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: spring_app
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/meu_banco
+      SPRING_DATASOURCE_USERNAME: usuario
+      SPRING_DATASOURCE_PASSWORD: senha
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
