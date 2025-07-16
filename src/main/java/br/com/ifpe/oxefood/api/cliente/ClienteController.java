@@ -25,7 +25,7 @@ import br.com.ifpe.oxefood.modelo.cliente.ClienteService;
 @RestController // O que faz essa class ser controlador é o (@RestController)
 @RequestMapping("/api/cliente") // Indica o endereço do controlador para rodar na tela.
 @CrossOrigin // Para receber requisições do react
-@Tag(
+@Tag(// @Tag é usada para agrupar e descrever a API no Swagger UI
     name = "API Cliente",
     description = "API responsável pelos servidos de cliente no sistema"
 )
@@ -40,7 +40,7 @@ public class ClienteController {
     @Autowired // estânciar um objeto
   private ClienteService clienteService;
 
-
+    // @Operation descreve o propósito do endpoint abaixo
     @Operation(
        summary = "Serviço responsável por salvar um cliente no sistema.",
        description = "Exemplo de descrição de um endpoint responsável por inserir um cliente no sistema."

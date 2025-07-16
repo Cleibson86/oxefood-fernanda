@@ -1,0 +1,359 @@
+
+01) Considerando as classes abaixo:
+
+
+@Entity
+@Table(name = "Livro")
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Livro {
+  
+   @Id
+   @GeneratedValue(strategy = GenerationType.SEQUENCE)
+   private Long id;
+
+
+   @Column
+   private String titulo;
+
+
+   @Column
+   private String autor;
+
+
+   @Column
+   private Double preco;
+
+
+}
+...
+
+
+@Entity
+@Table(name = "Biblioteca")
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Biblioteca extends  Livro
+ {
+  
+   @Id
+   @GeneratedValue(strategy = GenerationType.SEQUENCE)
+   private Long id;
+
+
+   @Column
+   private String responsavel;
+
+
+}
+-------------------------------------------------------
+
+a) Implemente um relacionamento de 1 - n (um para muitos) bidirecional entre as classes Livro e Biblioteca (C18 - Back-end - Relacionando Entidades) de forma que:
+um livro tenha uma relação com biblioteca;
+uma Biblioteca tenha uma lista de livros;
+
+Copie o código das classes, cole no quadro abaixo e incremente o código de acordo com o solicitado pela questão:  (1,0 ponto)
+
+Resposta:
+
+@OneToMany(mappedBy = "livro", orphanRemoval = true, fetch = FetchType.EAGER)
+   private List<Biblioteca> biblioteca;
+
+---------------------------------------------------------
+
+b) Implemente as seguintes validações de banco de dados (Aula C20 - Validações no back-end):
+Os campos titulo e autor da classe Livro não podem ser nulos;
+O campo responsavel da classe Biblioteca não pode ser nulo;
+O campo titulo da classe Livro deve ser único no banco de dados;
+
+Copie o código das classes, cole no quadro abaixo e incremente o código de acordo com o solicitado pela questão:  (0,5 ponto)
+
+Resposta:
+
+@NotNull(message = "O titulo é de preenchimento obrigatório")
+ @Column(unique = true)
+private String titulo;
+@NotNull(message = "O Autor  é de preenchimento obrigatório")
+private String autor;
+
+ @Column
+@NotNull(message = "O responsavel  é de preenchimento obrigatório")
+   private String responsavel;
+
+--------------------------------------------------------------------------
+
+c) Implemente na interface abaixo as seguintes consultas (Aula C25 - Implementando filtros de pesquisa):
+Implemente uma consulta para filtrar todos os livros por autor. Esta consulta deve ignorar caracteres maiúsculos e minúsculos (caixa alta e caixa baixa). (0,5 ponto)
+Implemente uma consulta para filtrar todos os livros por titulo e autor. Esta consulta deve ser exata, ou seja, só irá retornar os livros se o usuário informar exatamente o titulo e o autor do livro. (0,5 ponto)
+
+Resposta:
+
+public interface LivroRepository extends JpaRepository<Livro, Long> {
+
+
+
+@Query(value = "SELECT l FROM livros l WHERE l.autor = :autor")
+   List<livro> consultarPorautor(String autor);
+
+
+@Query(value = "SELECT l FROM livros l WHERE l.autor = :autor")
+   List<livro> consultarPorautor(String autor);
+   
+}
+
+----------------------------------------------------------------------------------
+d) Considerando o método abaixo, modifique o código para permitir (Aula C22 - Back-end - Controle de Acesso - Parte 1):
+
+Acesso público a rota (endpoint) que altera um Livro em LivroController: (0,5 ponto)
+
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
+    http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(c -> c.disable())
+        .authorizeHttpRequests(authorize -> authorize
+
+
+            .requestMatchers(HttpMethod.POST, "/api/livro").permitAll()
+              
+
+
+            .anyRequest().authenticated()
+
+
+        )
+        .sessionManagement((session) -> session
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )            
+        .authenticationProvider(authenticationProvider)
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+    return http.build();
+}
+--------------------------------------------------------------------------------
+02) Considerando as classes abaixo:
+
+
+@Entity
+@Table(name = "Gerente")
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Gerente {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+
+    @Column
+    private String nome;
+
+
+    @Column
+    private LocalDate dataNascimento;
+    
+}
+
+...
+
+
+@Entity
+@Table(name = "Departamento")
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Departamento {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+
+    @Column
+    private Integer qtdFuncionarios;
+
+
+}
+
+------------------------------------------------------------------------
+a) Implemente um relacionamento de 1 - 1 (um para um) unidirecional entre as classes Gerente e Departamento (C18 - Back-end - Relacionando Entidades) de forma que:
+um departamento tenha um gerente;
+
+Copie o código das classes, cole no quadro abaixo e incremente o código de acordo com o solicitado pela questão:  (0,5 ponto)
+
+Resposta:
+
+@OneToOne
+@JoinColumn(name = "gerente_id", referencedColumnName = "id")
+private Gerente gerente;
+--------------------------------------------------------------------------
+
+b) Implemente no quadro abaixo a classe GerenteRequest com as seguintes validações na entrada das requisições (Aula C20 - Validações no back-end) (0,5 ponto):
+O campo nome não pode ser nulo ou vazio;
+O campo nome não pode ter mais que 100 caracteres;
+O campo dataNascimento deve ser preenchido com uma data igual ou anterior a data de hoje;
+
+Resposta:
+
+ @Column
+@NotBlank(message = "O campo nome  não pode ser nulo ou vazio")
+@Length(max = 100, message = "O campo nome tem que ter entre {max} caracteres")
+
+
+    private String nome;
+
+ @Column
+@Past( message = “deve ser preenchido com uma data igual ou anterior a data de hoje”
+    private LocalDate dataNascimento;
+
+_____________________________________________________________________________
+
+c) Implemente nas interfaces abaixos as seguintes consultas (Aula C25 - Implementando filtros de pesquisa):
+Implemente uma consulta para filtrar todos os gerentes pelo nome. Retorne uma lista ordenada pela data de nascimento do Gerente. Esta consulta deve ser aproximada, ou seja, caso o usuário informe só parte do nome do gerente, este deverá ser retornado na consulta. (0,5 ponto)
+Implemente uma consulta para filtrar todos os departamentos que tiverem uma quantidade de funcionários maior que 60. (0,5 ponto)
+
+Resposta:
+
+// Repositório para Gerente
+public interface GerenteRepository extends JpaRepository<Gerente, Long> {
+
+    // Consulta por nome (aproximada) e ordenada por data de nascimento
+    @Query("SELECT g FROM Gerente g WHERE LOWER(g.nome) LIKE LOWER(CONCAT('%', :nome, '%')) ORDER BY g.dataNascimento")
+    List<Gerente> consultarPorNomeAproximado(@Param("nome") String nome);
+}
+
+// Repositório para Departamento
+public interface DepartamentoRepository extends JpaRepository<Departamento, Long> {
+
+    // Consulta para departamentos com mais de 60 funcionários
+    @Query("SELECT d FROM Departamento d WHERE d.qtdFuncionarios > 60")
+    List<Departamento> consultarDepartamentosComMaisDe60Funcionarios();
+}
+
+---------------------------------------------------------------------------------
+
+d) Considerando o método abaixo, modifique o código para permitir (Aula C22 - Back-end - Controle de Acesso - Parte 1):
+
+Que apenas usuários que tenham o perfil de acesso ADMIN possam acessar a rota (endpoint) que remove um Gerente em GerenteController: (1,0 ponto)
+
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
+    http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(c -> c.disable())
+        .authorizeHttpRequests(authorize -> authorize
+
+
+        .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
+
+
+            .anyRequest().authenticated()
+
+
+        )
+        .sessionManagement((session) -> session
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )            
+        .authenticationProvider(authenticationProvider)
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+    return http.build();
+}
+
+
+----------------------------------------------------------------------------------
+03) Conforme estudamos na aula “C21 - Exibindo mensagens no front-end”, explique qual componente utilizamos no projeto do front-end para exibirmos as mensagens para os usuários? Como ele foi utilizado? Dê exemplos. (1,0 ponto)
+
+Resposta:
+
+Utiliazando a bibioteca  <ToastContainer /> , colocando no arquivo app.js e criamos e o diretorio src/views/util,  e criamos um arquivo chamado  util.js onde fica armazenadas  as as menssagens onde podemos escolher a cor e  posicionar as menssagens exibidas em seguida é adiconar as modificações nos arquivos de cliente e entregador e produto.
+ 
+ ----------------------------------------------------------------------------------
+
+04) Na aula “C26 - Envio de e-mails com Templates Thymeleaf”, implementamos um método que foi chamado pelo save da classe ClienteService e que envia um email para o cliente após seu cadastro (código abaixo):
+
+public void enviarEmailConfirmacaoCadastroCliente(Cliente cliente) {
+
+    String assuntoEmail = "Bem vindo ao nosso aplicativo";
+
+    Context params = new Context();
+    params.setVariable("cliente", cliente);
+
+    this.sendMailTemplate("bem_vindo_cliente.html", cliente.getUsuario().getUsername(), assuntoEmail, params);
+}
+
+-----------------------------------------------------------------------------------
+Seguindo esta lógica, ao considerar o HTML abaixo do arquivo aprova_fornecedor.html: 
+
+...
+
+<table>
+   <tr>
+      <td>
+         <p>Prezado <span th:text="${nomeFornecedor} ?: ''"></span></p>
+	  <p>Seu cadastro foi aprovador no nosso sistema de análise</p>
+	  <p>A partir de <span th:text="${dataAtual} ?: ''">, você está autorizado a comprar em nossos sistemas um valor total de <span th:text="${valorTotal} ?: ''"> reais até o fim deste ano</p>
+      </td>
+   </tr>
+</table>
+
+
+Implemente o método abaixo para enviar email para o fornecedor, preenchendo os parâmetros necessários do arquivo aprova_fornecedor.html. (1,0 ponto)
+
+Resposta:
+
+public void enviarEmailAprovacaoFornecedor(Fornecedor fornecedor) {
+
+}
+----------------------------------------------------------------------------
+05) Conforme estudamos na aula “C30 - Documentando a API com Swagger”, explique qual biblioteca utilizamos no projeto do back-end para documentação da nossa API? Dê exemplos de como documentar uma rota em uma classe Controller. (1,0 ponto)
+
+Resposta:
+
+
+Springdoc , utilisando a dependecia do spring boot e as anotaçoes  de  @Tag(
+    name = "API Cliente",
+    description = "API responsável pelos servidos de cliente no sistema"
+)
+
+  @Operation(
+       summary = "Serviço responsável por salvar um cliente no sistema.",
+       description = "Exemplo de descrição de um endpoint responsável por inserir um cliente no sistema."
+   )
+desse jeito 
+
+-----------------------------------------------------------------------------
+
+06) Criamos na raiz do nosso projeto um arquivo chamado docker-compose.yml. Explique qual é a utilidade deste arquivo em nosso projeto e porque ele precisa ser executado no servidor que estaremos fazendo deploy da aplicação (aula C31 - Implantando os Projetos no Servidor). (1,0 ponto)
+
+Resposta:
+
+A utilidade desse arquivo  são as configuracoes do nome do banco e senha que são esseciais para conectar como banco de dados além de informar a porta do banco para ser feita a conexão 
+------------------------------------------------------------------------------
+
+07)O que é .env?
+.env significa "environment" (ambiente).
+
+É um arquivo onde você guarda senhas, URLs, chaves secretas e outras configurações fora do código.
+
+Evita expor informações ensíveis e facilita a troca de ambiente (desenvolvimento, produção etc).
+
+--------------------------------------------------------------------------------- 
+08)
