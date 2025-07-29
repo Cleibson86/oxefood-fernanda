@@ -1,0 +1,37 @@
+anotações sobre para que serve cada arquivo
+
+
+
+
+controller - Receber requisições HTTP
+Request - Representar os dados que o frontend enviou
+repository - Interface com acesso direto ao banco
+service - Lógica de validação, regras e integração com o repositório
+
+----------------------
+
+docker-compose.yml - subir um serviço de banco de dados PostgreSQL usando Docker de forma simples e automatizada
+
+-----------------------------
+
+application.properties - arquivo de configuração principal do Spring Boot. Ele permite configurar o comportamento da aplicação, como conexão com o banco de dados, porta do servidor, JWT, entre outros.
+
+
+
+------------------------------
+
+pom.xml - arquivo de configuração do Maven em projetos Java
+
+
+As dependências que seu projeto precisa (ex: Spring Web, JPA, PostgreSQL, JWT)
+
+O build do projeto (plugins, versões, empacotamento)
+
+E outras configurações como versão do Java
+
+
+--------------------------
+
+
+
+Templates Thymeleaf - envio de e-mail para um novo cliente cadastrado

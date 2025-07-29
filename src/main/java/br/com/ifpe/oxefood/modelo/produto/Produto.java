@@ -29,6 +29,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Produto extends EntidadeAuditavel  {
 
+    //relacionamento de muitos para um
    @ManyToOne
    private CategoriaProduto categoria;
   

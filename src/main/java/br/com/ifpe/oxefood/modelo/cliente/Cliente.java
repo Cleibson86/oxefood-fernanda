@@ -40,18 +40,20 @@ public class Cliente extends EntidadeAuditavel {
    @JoinColumn(nullable = false)
    private Usuario usuario;
 
-   @OneToMany(mappedBy = "cliente", orphanRemoval = true, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy = "cliente", orphanRemoval = true, fetch = FetchType.EAGER) //armazenar uma lista de endereços do cliente:
+
    @Fetch(FetchMode.SUBSELECT)
    private List<Endereco> enderecos;
 
 
-   @Column(nullable = false, length = 100)
+   @Column(nullable = false, length = 100) //O campo nome não poderá ser nulo e não pode pode ter mais que 100 caracteres ao ser salvo no banco de dados.
    private String nome;
 
    @Column(name = "dt_nasc")
    private LocalDate dataNascimento;
 
-   @Column(unique = true)
+   @Column(unique = true) // O campo cpf é único no banco de dados, ou seja, não poderá ser salvo um cliente com um CPF que já exista em algum outro cliente no banco de dados.
+
    private String cpf;
 
    @Column
